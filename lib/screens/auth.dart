@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:chat_app/utils/constants/image_strings.dart';
 import 'package:chat_app/utils/constants/sizes.dart';
 import 'package:chat_app/utils/constants/text_strings.dart';
+import 'package:chat_app/widgets/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -17,22 +21,27 @@ class _AuthScreenState extends State<AuthScreen> {
   var _password = '';
   var _email = '';
   var _isLogin = true;
+  File? _pickedImageFile;
 
   void _submit() async {
     final isValid = _formKey.currentState!.validate();
-    if (!isValid) {
+    if (!isValid || (_isLogin && _pickedImageFile == null)) {
       return;
     }
     _formKey.currentState!.save();
     try {
       if (_isLogin) {
-        final userCredenial = await _auth.signInWithEmailAndPassword(
+        await _auth.signInWithEmailAndPassword(
             email: _email, password: _password);
-        print(userCredenial);
       } else {
-        final userCredenial = await _auth.createUserWithEmailAndPassword(
+        final userCredential = await _auth.createUserWithEmailAndPassword(
             email: _email, password: _password);
-        print(userCredenial);
+        final storage = FirebaseStorage.instance;
+        final ref = storage
+            .ref()
+            .child('user_images')
+            .child('${userCredential.user!.uid}.jpg');
+        await ref.putFile(_pickedImageFile!);
       }
     } on FirebaseAuthException catch (error) {
       var message = 'An error occurred, please check your credentials!';
@@ -77,6 +86,11 @@ class _AuthScreenState extends State<AuthScreen> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
+                          if (!_isLogin)
+                            UserImagePicker(
+                              onPickImage: (pickedImage) =>
+                                  _pickedImageFile = pickedImage,
+                            ),
                           TextFormField(
                             decoration: const InputDecoration(
                               hintText: TText.emailHintText,
