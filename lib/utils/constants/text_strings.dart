@@ -6,12 +6,26 @@ class TText {
   static const String emailLabelText = 'Email Address';
   static const String passwordHintText = 'Enter your password';
   static const String passwordLabelText = 'Password';
-  // Validation Error Text
+  static const String usernameHintText = 'Enter your username';
+  static const String usernameLabelText = 'Username';
+
+  // Email validation error text
   static String? getEmailValidatorText(String? email) {
     if (email!.isEmpty || !email.contains('@')) {
       return 'Please enter a valid email address';
     }
     return null;
+  }
+
+  // Username Validation Error Text
+  static String? getUsernameValidatorText(String? username) {
+    if (username!.isEmpty || username.length < 4) {
+      return 'Username must be at least 4 characters long';
+    } else if (username.length > 12) {
+      return 'Username must be at most 12 characters long';
+    } else {
+      return null;
+    }
   }
 
   // Password Validation Error Text

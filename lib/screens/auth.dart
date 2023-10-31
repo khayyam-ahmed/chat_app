@@ -7,6 +7,7 @@ import 'package:chat_app/widgets/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -20,15 +21,22 @@ class _AuthScreenState extends State<AuthScreen> {
   final _formKey = GlobalKey<FormState>();
   var _password = '';
   var _email = '';
+  var _username = '';
   var _isLogin = true;
   File? _pickedImageFile;
+  var _isAuthenticating = false;
 
   void _submit() async {
     final isValid = _formKey.currentState!.validate();
-    if (!isValid || (_isLogin && _pickedImageFile == null)) {
+    if (!isValid || (!_isLogin && _pickedImageFile == null)) {
       return;
     }
     _formKey.currentState!.save();
+
+    setState(() {
+      _isAuthenticating = true;
+    });
+
     try {
       if (_isLogin) {
         await _auth.signInWithEmailAndPassword(
@@ -36,12 +44,20 @@ class _AuthScreenState extends State<AuthScreen> {
       } else {
         final userCredential = await _auth.createUserWithEmailAndPassword(
             email: _email, password: _password);
-        final storage = FirebaseStorage.instance;
-        final ref = storage
+        final userRefInFbSt = FirebaseStorage.instance
             .ref()
             .child('user_images')
             .child('${userCredential.user!.uid}.jpg');
-        await ref.putFile(_pickedImageFile!);
+        await userRefInFbSt.putFile(_pickedImageFile!);
+        final imgUrl = await userRefInFbSt.getDownloadURL();
+        final userRefInFbFs = FirebaseFirestore.instance
+            .collection('users')
+            .doc(userCredential.user!.uid);
+        await userRefInFbFs.set({
+          'username': _username,
+          'email': _email,
+          'image_url': imgUrl,
+        });
       }
     } on FirebaseAuthException catch (error) {
       var message = 'An error occurred, please check your credentials!';
@@ -56,6 +72,9 @@ class _AuthScreenState extends State<AuthScreen> {
             backgroundColor: Theme.of(context).colorScheme.error,
           ),
         );
+        setState(() {
+          _isAuthenticating = false;
+        });
       }
     }
   }
@@ -102,8 +121,22 @@ class _AuthScreenState extends State<AuthScreen> {
                             validator: (email) {
                               return TText.getEmailValidatorText(email);
                             },
-                            onSaved: (email) => _email = email!,
+                            onSaved: (email) => _email = email!.trim(),
                           ),
+                          if (!_isLogin)
+                            TextFormField(
+                              decoration: const InputDecoration(
+                                hintText: TText.usernameHintText,
+                                labelText: TText.usernameLabelText,
+                              ),
+                              enableSuggestions: false,
+                              textCapitalization: TextCapitalization.words,
+                              validator: (username) {
+                                return TText.getUsernameValidatorText(username);
+                              },
+                              onSaved: (username) =>
+                                  _username = username!.trim(),
+                            ),
                           TextFormField(
                             decoration: const InputDecoration(
                               hintText: TText.passwordHintText,
@@ -116,25 +149,29 @@ class _AuthScreenState extends State<AuthScreen> {
                             onSaved: (password) => _password = password!,
                           ),
                           const SizedBox(height: TSizes.generalSizedBoxHeight),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Theme.of(context)
-                                  .colorScheme
-                                  .primaryContainer,
+                          if (_isAuthenticating)
+                            const CircularProgressIndicator(),
+                          if (!_isAuthenticating)
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Theme.of(context)
+                                    .colorScheme
+                                    .primaryContainer,
+                              ),
+                              onPressed: () => _submit(),
+                              child: Text(_isLogin ? 'Login' : 'Signup'),
                             ),
-                            onPressed: () => _submit(),
-                            child: Text(_isLogin ? 'Login' : 'Signup'),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              setState(() {
-                                _isLogin = !_isLogin;
-                              });
-                            },
-                            child: Text(_isLogin
-                                ? 'Create new account'
-                                : 'I already have an account'),
-                          ),
+                          if (!_isAuthenticating)
+                            TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  _isLogin = !_isLogin;
+                                });
+                              },
+                              child: Text(_isLogin
+                                  ? 'Create new account'
+                                  : 'I already have an account'),
+                            ),
                         ],
                       ),
                     ),
