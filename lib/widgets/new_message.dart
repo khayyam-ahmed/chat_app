@@ -29,18 +29,21 @@ class _NewMessageFieldState extends State<NewMessageField> {
           .doc(user.uid)
           .get();
 
-      FirebaseFirestore.instance.collection('chat').add({
-        'text': message,
-        'createdAt': Timestamp.now(),
-        'userId': user.uid,
-        'username': userDb.data()!['username'],
-        'userImage': userDb.data()!['image_url'],
+      try {
+        FirebaseFirestore.instance.collection('chat').add({
+          'text': message,
+          'createdAt': Timestamp.now(),
+          'userId': user.uid,
+          'username': userDb.data()!['username'],
+          'userImage': userDb.data()!['image_url'],
+        });
+      } catch (e) {
+        print(e.toString());
+      }
+      setState(() {
+        _isSending = false;
       });
     }
-
-    setState(() {
-      _isSending = false;
-    });
   }
 
   @override
