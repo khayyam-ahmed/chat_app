@@ -42,11 +42,10 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
       body: Column(
         children: [
-          GestureDetector(
-            onTap: () => FocusScope.of(context).unfocus(),
-            onVerticalDragEnd: (_) => FocusScope.of(context).unfocus(),
-            child: const Expanded(
-              child: ChatMessages(),
+          Expanded(
+            child: GestureDetector(
+              onTap: () => FocusScope.of(context).unfocus(),
+              child: const ChatMessages(),
             ),
           ),
           const NewMessageField(),
