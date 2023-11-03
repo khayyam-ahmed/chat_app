@@ -141,7 +141,7 @@ Happy coding!
 # Screenshots
 <tr>
 <td><img src="assets/screenshots/auth_screen.png" width="360" height="820"></td>
-<td><img src="assets/screenshots/chat_screen.png" width="360" height="820"></td>
+<td><img src="assets/screenshots/chat_screen.png" width="360" height="820"></td> 
 </tr>
 
 
