@@ -13,12 +13,12 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  /// Sets up push notifications for the chat screen.
+  /// Requests permission from the user to receive notifications,
+  /// subscribes the user to the 'chat' topic.
   void setUpPushNotifications() async {
     final fcm = FirebaseMessaging.instance;
     await fcm.requestPermission();
-    // final token = await fcm.getToken();
-    // print(token);
-    // print('here');
     fcm.subscribeToTopic('chat');
   }
 
@@ -40,12 +40,16 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ],
       ),
-      body: const Column(
+      body: Column(
         children: [
-          Expanded(
-            child: ChatMessages(),
+          GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            onVerticalDragEnd: (_) => FocusScope.of(context).unfocus(),
+            child: const Expanded(
+              child: ChatMessages(),
+            ),
           ),
-          NewMessageField(),
+          const NewMessageField(),
         ],
       ),
     );

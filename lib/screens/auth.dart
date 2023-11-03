@@ -1,14 +1,32 @@
+/// FILEPATH: /home/khayyam/Development/chat_app/lib/screens/auth.dart
+///
+/// This file contains the implementation of the [AuthScreen] widget, which is responsible for
+/// authenticating users in the chat app. It uses Firebase Authentication, Firebase Storage,
+/// and Cloud Firestore to create and authenticate users, and store user data.
+///
+/// The [AuthScreen] widget is a [StatefulWidget] that has a [_AuthScreenState] state. It contains
+/// a form that allows users to enter their email, password, and username (if they are signing up).
+/// It also allows users to pick an image for their profile picture (if they are signing up).
+///
+/// The [_AuthScreenState] state contains the logic for authenticating users. It uses the
+/// [_auth] instance of [FirebaseAuth] to sign in or create a new user. If the user is new, it
+/// uploads their profile picture to Firebase Storage and stores their data in Cloud Firestore.
+///
+/// The [AuthScreen] widget is used in the [ChatApp] widget to authenticate users before they can
+/// access the chat rooms.
+///
+
 import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:chat_app/utils/constants/image_strings.dart';
 import 'package:chat_app/utils/constants/sizes.dart';
 import 'package:chat_app/utils/constants/text_strings.dart';
 import 'package:chat_app/widgets/image_picker.dart';
-import 'package:flutter/material.dart';
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});

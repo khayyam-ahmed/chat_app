@@ -14,6 +14,15 @@ class _NewMessageFieldState extends State<NewMessageField> {
   bool _isSending = false;
 
   void _sendMessage() async {
+    /// Sends the message to Firebase.
+    ///
+    /// If the message is empty, it returns without doing anything.
+    /// Otherwise, it sets the [_isSending] flag to true, clears the [_textController],
+    /// gets the current user from FirebaseAuth, and retrieves the user's data from Firestore.
+    /// Then, it adds the message to the 'chat' collection in Firestore with the message text,
+    /// creation timestamp, user ID, username, and user image URL.
+    /// If an error occurs, it prints the error message to the console.
+    /// Finally, it sets the [_isSending] flag to false.
     var message = _textController.text.trim();
     if (message.isEmpty) {
       return;

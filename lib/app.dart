@@ -1,3 +1,13 @@
+/// This file contains the [App] widget which is the root widget of the chat app.
+/// It imports [AuthScreen], [ChatScreen], and [SplashScreen] widgets along with
+/// [TText] and [TAppTheme] constants from their respective files.
+/// The [App] widget is a stateless widget that returns a [MaterialApp] widget.
+/// The [MaterialApp] widget has a title, a light theme, a dark theme, and a home
+/// widget that is a [StreamBuilder]. The [StreamBuilder] listens to the
+/// authentication state changes and returns [SplashScreen] if the connection
+/// state is waiting, [ChatScreen] if the user is authenticated, and [AuthScreen]
+/// if the user is not authenticated.
+
 import 'package:chat_app/screens/auth.dart';
 import 'package:chat_app/screens/chat.dart';
 import 'package:chat_app/screens/splash_screen.dart';
