@@ -1,13 +1,14 @@
 # FLUTTER CHAT_APP
-A guided project to learn user authentication, and push notifications. Following udemy course [Flutter & Dart - The Complete Guide](https://www.udemy.com/course/learn-flutter-dart-to-build-ios-android-apps/) by Maximillian Schwarzmüller.
-The original project source code can be found [here](https://github.com/academind/flutter-complete-guide-course-resources/tree/main/Code%20Snapshots/14%20Chat%20App).
+_A **guided project** to learn user authentication, and push notifications. **Following udemy course [Flutter & Dart - The Complete Guide](https://www.udemy.com/course/learn-flutter-dart-to-build-ios-android-apps/) by Maximillian Schwarzmüller**.
+The original project source code can be found [here](https://github.com/academind/flutter-complete-guide-course-resources/tree/main/Code%20Snapshots/14%20Chat%20App)._
+
+**Introduction**:<br>
+Chat App is a basic chat application built using Flutter and Firebase for various backend features. This app allows users to send and receive messages in real-time, authenticate users, store user data, and send push notifications. Whether you want to explore how real-time messaging and user authentication work in Flutter or build your chat application, this project serves as a great starting point.
 
 **Disclaimer**:
  - This project was for learning purposes.
  - And this is not a replica of Maximillian's actuall project, which you can find <a href = 'https://github.com/academind/flutter-complete-guide-course-resources/tree/main/Code%20Snapshots/14%20Chat%20App'>here</a>
   - I have made some changes to the UI and the code structure.
-
-Chat App is a basic chat application built using Flutter and Firebase for various backend features. This app allows users to send and receive messages in real-time, authenticate users, store user data, and send push notifications. Whether you want to explore how real-time messaging and user authentication work in Flutter or build your chat application, this project serves as a great starting point.
 
 # Table of Contents
 - [Features](#features)
