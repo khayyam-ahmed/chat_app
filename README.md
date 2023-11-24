@@ -8,7 +8,6 @@ Chat App is a basic chat application built using Flutter and Firebase for variou
 **Disclaimer**:
  - This project was for learning purposes.
  - And this is not a replica of Maximillian's actuall project, which you can find <a href = 'https://github.com/academind/flutter-complete-guide-course-resources/tree/main/Code%20Snapshots/14%20Chat%20App'>here</a>
-  - I have made some changes to the UI and the code structure.
 
 # Table of Contents
 - [Features](#features)
